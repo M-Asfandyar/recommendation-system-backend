@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+// Used the Flask API URL from environment variables
 const flaskApiUrl = process.env.FLASK_API_URL;
 
 router.post('/recommend', async (req, res) => {
   try {
-    const userData = req.body;
+    const { user_id } = req.body;
 
-    // Send a POST request to the Flask service using the environment variable
-    const response = await axios.post(`${flaskApiUrl}/predict`, userData);
+    // Send user data (user_id) to the Flask API
+    const response = await axios.post(`${flaskApiUrl}/predict`, { user_id });
 
-    // Send the recommendation back to the client
-    res.json(response.data);
+    // Forward the recommendations back to the client
+    res.json({ recommendations: response.data.recommendations });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: 'Error getting recommendation' });
+    res.status(500).json({ error: 'Error getting recommendations' });
   }
 });
 
