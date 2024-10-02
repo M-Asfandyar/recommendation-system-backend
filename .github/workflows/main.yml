@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Triggers on push to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Set the Node.js version as needed
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+
+      # Deploy to Heroku if tests pass
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          echo "Deploying to Heroku..."
+          git remote add heroku https://git.heroku.com/recommendation-system-backend-2aac9e63e1ef.git
+          git push heroku main
