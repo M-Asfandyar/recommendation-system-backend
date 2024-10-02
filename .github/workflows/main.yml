@@ -37,7 +37,7 @@ jobs:
       # Deploy to Heroku
       - name: Deploy to Heroku
         run: |
-          heroku git:remote -a recommendation-system-backend-2aac9e63e1ef
+          heroku git:remote -a recommendation-system-backend
           git push heroku main
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
