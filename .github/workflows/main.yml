@@ -24,12 +24,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Install Heroku CLI
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      # Deploy to Heroku if tests pass
-      - name: Deploy to Heroku
+      # Authenticate with Heroku using the API key
+      - name: Authenticate with Heroku
+        run: heroku auth:token
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      # Deploy to Heroku
+      - name: Deploy to Heroku
         run: |
-          echo "Deploying to Heroku..."
-          git remote add heroku https://git.heroku.com/recommendation-system-backend-2aac9e63e1ef.git
+          heroku git:remote -a recommendation-system-backend-2aac9e63e1ef
           git push heroku main
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
