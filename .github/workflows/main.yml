@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Set the Node.js version as needed
+          node-version: '16'  # Adjust if needed
 
       # Install dependencies
       - name: Install dependencies
@@ -28,16 +28,15 @@ jobs:
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      # Authenticate with Heroku using the API key
+      # Authenticate with Heroku using API key
       - name: Authenticate with Heroku
-        run: heroku auth:token
+        run: echo "$HEROKU_API_KEY" | heroku auth:token
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
-      # Deploy to Heroku
+      # Deploy to Heroku using the Heroku CLI and the Heroku API
       - name: Deploy to Heroku
         run: |
-          heroku git:remote -a recommendation-system-backend
-          git push heroku main
+          heroku deploy:jar --app recommendation-system-backend
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
